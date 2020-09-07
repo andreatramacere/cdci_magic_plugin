@@ -240,16 +240,15 @@ class MAGICTableQuery(ProductQuery):
     def process_product_method(self, instrument, prod_list,api=False):
 
         _names = []
-        #_lc_path = []
-        #_root_path=[]
-        #_html_fig = []
+        _table_path = []
+        _html_fig = []
 
         _data_list=[]
         _binary_data_list=[]
         for query_prod in prod_list.prod_list:
             #print('->name',query_lc.name)
             #query_lc.add_url_to_fits_file(instrument._current_par_dic, url=instrument.disp_conf.products_url)
-            #query_lc.write()
+            query_prod.write()
 
             #if api == False:
             #    _names.append(query_lc.name)
@@ -264,6 +263,11 @@ class MAGICTableQuery(ProductQuery):
             #                                            title='Start Time: %s'%instrument.get_par_by_name('T1')._astropy_time.utc.value,
             #                                            x_label='Time  (s)',
             #                                            y_label='Rate  (cts/s)'))
+
+            if api==False:
+                _names.append(query_prod.meta_data['src_name'])
+                _table_path.append(str(query_prod.file_path.name))
+                _html_fig.append(query_prod.get_html_draw())
 
             if api==True:
                 _data_list.append(query_prod.encode(use_binary=False))
@@ -282,12 +286,10 @@ class MAGICTableQuery(ProductQuery):
             query_out.prod_dictionary['astropy_table_product_ascii_list'] = _data_list
             #query_out.prod_dictionary['binary_data_product_list'] = _binary_data_list
         else:
-            pass
-            #query_out.prod_dictionary['name'] = _names
-            #query_out.prod_dictionary['file_name'] = _lc_path
-            #query_out.prod_dictionary['root_file_name'] = _root_path
-            #query_out.prod_dictionary['image'] =_html_fig
-            #query_out.prod_dictionary['download_file_name'] = 'light_curves.tar.gz'
+            query_out.prod_dictionary['name'] = _names
+            query_out.prod_dictionary['file_name'] = _table_path
+            query_out.prod_dictionary['image'] = _html_fig
+            query_out.prod_dictionary['download_file_name'] = 'magic_table.fits.gz'
 
         query_out.prod_dictionary['prod_process_message'] = ''
 
