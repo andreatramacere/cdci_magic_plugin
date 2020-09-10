@@ -156,7 +156,7 @@ class MAGICTable(AstropyTable):
                                           table=table,
                                           src_name=src_name,
                                           meta_data=meta_data)
-                                       
+
 
 
     @classmethod
@@ -186,7 +186,7 @@ class MAGICTable(AstropyTable):
                 print('->',t_rec,_o_dict['src_name'],t_rec.meta)
                 src_name=_o_dict['src_name']
                 file_name = src_name+ '.fits'
-
+                print('test,',src_name,file_name,out_dir)
                 magic_table = cls(name=src_name,file_name=file_name, table=t_rec, src_name=_o_dict['src_name'], meta_data=t_rec.meta,out_dir=out_dir)
 
                 prod_list.append(magic_table)
