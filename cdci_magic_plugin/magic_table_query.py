@@ -249,7 +249,7 @@ class MAGICTableQuery(ProductQuery):
             #print('->name',query_lc.name)
             #query_lc.add_url_to_fits_file(instrument._current_par_dic, url=instrument.disp_conf.products_url)
             print('query_prod',vars(query_prod))
-            query_prod.write()
+            query_prod.write(name=query_prod.name)
 
             #if api == False:
             #    _names.append(query_lc.name)
