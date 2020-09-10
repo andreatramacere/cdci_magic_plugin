@@ -156,10 +156,11 @@ class MAGICTable(AstropyTable):
                                           table=table,
                                           src_name=src_name,
                                           meta_data=meta_data)
+                                       
 
 
     @classmethod
-    def build_from_res(cls,res):
+    def build_from_res(cls,res,out_dir=None,prod_prefix='magic_table'):
 
 
         MWL_files=[]
@@ -169,11 +170,11 @@ class MAGICTable(AstropyTable):
 
         prod_list = []
 
-        #if out_dir is None:
-        #    out_dir = './'
+        if out_dir is None:
+            out_dir = './'
 
-        #if prod_prefix is None:
-        #    prod_prefix=''
+        if prod_prefix is None:
+            prod_prefix=''
 
         _o_dict = json.loads(res.json())
 
@@ -183,7 +184,10 @@ class MAGICTable(AstropyTable):
                 t_rec = ascii.read(_o_dict[_kw][p]['astropy_table']['ascii'])
                 t_rec.meta['paper_id']=_o_dict[_kw][p]['paper_id']
                 print('->',t_rec,_o_dict['src_name'],t_rec.meta)
-                magic_table = cls(name='magic_table', table=t_rec, src_name=_o_dict['src_name'], meta_data=t_rec.meta)
+                src_name=_o_dict['src_name']
+                file_name = src_name+ '.fits'
+
+                magic_table = cls(name=src_name,file_name=file_name, table=t_rec, src_name=_o_dict['src_name'], meta_data=t_rec.meta,out_dir=out_dir)
 
                 prod_list.append(magic_table)
 
@@ -204,7 +208,7 @@ class MAGICTableQuery(ProductQuery):
 
         #delta_t = instrument.get_par_by_name('time_bin')._astropy_time_delta.sec
         print('-> res',res.json())
-        prod_list = MAGICTable.build_from_res(res)
+        prod_list = MAGICTable.build_from_res(res,out_dir=out_dir)
 
         # print('spectrum_list',spectrum_list)
 
@@ -249,7 +253,7 @@ class MAGICTableQuery(ProductQuery):
             #print('->name',query_lc.name)
             #query_lc.add_url_to_fits_file(instrument._current_par_dic, url=instrument.disp_conf.products_url)
             print('query_prod',vars(query_prod))
-            query_prod.write(name=query_prod.name)
+            query_prod.write()
 
             #if api == False:
             #    _names.append(query_lc.name)
@@ -267,7 +271,7 @@ class MAGICTableQuery(ProductQuery):
 
             if api==False:
                 print('query_prod.meta_data',query_prod.meta_data)
-                _names.append(query_prod.meta_data['Source'])
+                _names.append(query_prod.name)
                 _table_path.append(str(query_prod.file_path.name))
                 _html_fig.append(query_prod.get_html_draw())
 
