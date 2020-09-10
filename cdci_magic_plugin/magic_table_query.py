@@ -149,16 +149,16 @@ class MAGICTable(BaseQueryProduct):
         else:
             self.meta_data = meta_data
 
-        self.data = MAGICAstropyTable(name=name, table=table, src_name=src_name, meta_data=meta_data)
+
 
         super(MAGICTable, self).__init__(name=name,
-                                         data=table,
+                                         data=None,
                                          name_prefix=prod_prefix,
                                          file_dir=out_dir,
                                          file_name=file_name,
                                          meta_data=meta_data)
 
-
+        self.data = MAGICAstropyTable(name=name, table=table, src_name=src_name, meta_data=meta_data)
 
 
 
