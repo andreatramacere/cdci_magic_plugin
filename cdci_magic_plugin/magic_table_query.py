@@ -108,9 +108,8 @@ class MAGICAstropyTable(object):
     def write(self,name,format='fits',overwrite=True):
         self._table.write(name,format=format,overwrite=overwrite)
 
-    @classmethod
-    def write_fits_file(cls, file_name,overwrite=True):
-        return cls.write(name=file_name,overwrite=overwrite)
+    def write_fits_file(self, file_name,overwrite=True):
+        return self.write(name=file_name,overwrite=overwrite)
 
     @classmethod
     def from_ecsv_file(cls, file_name,):
