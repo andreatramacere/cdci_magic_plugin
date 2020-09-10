@@ -53,7 +53,7 @@ from .magic_dataserver_dispatcher import  MAGICAnalysisException
 
 
 
-class AstropyTable(object):
+class MAGICAstropyTable(object):
     def __init__(self,
                  name,
                  table,
@@ -133,29 +133,34 @@ class AstropyTable(object):
 
 
 
-class MAGICTable(AstropyTable):
+class MAGICTable(BaseQueryProduct):
     def __init__(self,
                  name,
                  table,
+                 file_name,
                  src_name='None',
+                 out_dir=None,
+                 prod_prefix=None,
                  meta_data={}):
 
-
+        self.file_name=file_name
         if meta_data == {} or meta_data is None:
             self.meta_data = {'product': 'MAGIC_TABLE', 'instrument': 'MAGIC', 'src_name': src_name}
         else:
             self.meta_data = meta_data
 
-        #self.meta_data['time'] = 'time'
-        #self.meta_data['rate'] = 'rate'
-        #self.meta_data['rate_err'] = 'rate_err'
-
-
+        self.data = MAGICAstropyTable(name=name, table=table, src_name=src_name, meta_data=meta_data)
 
         super(MAGICTable, self).__init__(name=name,
-                                          table=table,
-                                          src_name=src_name,
-                                          meta_data=meta_data)
+                                         data=table,
+                                         name_prefix=prod_prefix,
+                                         file_dir=out_dir,
+                                         file_name=file_name,
+                                         meta_data=meta_data)
+
+
+
+
 
 
 
@@ -187,7 +192,12 @@ class MAGICTable(AstropyTable):
                 src_name=_o_dict['src_name']
                 file_name = src_name+ '.fits'
                 print('test,',src_name,file_name,out_dir)
-                magic_table = cls(name=src_name,file_name=file_name, table=t_rec, src_name=_o_dict['src_name'], meta_data=t_rec.meta,out_dir=out_dir)
+                magic_table = cls(name=src_name,
+                                  file_name=file_name,
+                                  table=t_rec,
+                                  src_name=_o_dict['src_name'],
+                                  meta_data=t_rec.meta,
+                                  out_dir=out_dir)
 
                 prod_list.append(magic_table)
 
@@ -276,7 +286,7 @@ class MAGICTableQuery(ProductQuery):
                 _html_fig.append(query_prod.get_html_draw())
 
             if api==True:
-                _data_list.append(query_prod.encode(use_binary=False))
+                _data_list.append(query_prod.data.encode(use_binary=False))
                 #try:
                 #    open(root_file_path.path, "wb").write(BinaryData().decode(res_json['root_file_b64']))
                 #    lc.root_file_path = root_file_path
