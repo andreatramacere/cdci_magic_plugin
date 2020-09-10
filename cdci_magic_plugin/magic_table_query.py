@@ -163,9 +163,8 @@ class MAGICTable(BaseQueryProduct):
 
         self.data = MAGICAstropyTable(name=name, table=table, src_name=src_name, meta_data=meta_data)
 
-
-
-
+    def get_html_draw(self):
+        pass
 
     @classmethod
     def build_from_res(cls,res,out_dir=None,prod_prefix='magic_table'):
