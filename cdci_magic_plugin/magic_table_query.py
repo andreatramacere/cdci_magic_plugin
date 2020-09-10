@@ -266,6 +266,7 @@ class MAGICTableQuery(ProductQuery):
             #                                            y_label='Rate  (cts/s)'))
 
             if api==False:
+                print('query_prod.meta_data',query_prod.meta_data)
                 _names.append(query_prod.meta_data['src_name'])
                 _table_path.append(str(query_prod.file_path.name))
                 _html_fig.append(query_prod.get_html_draw())
